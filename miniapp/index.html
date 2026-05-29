@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آتیه مهر طوس - مینی اپ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Vazirmatn', system-ui, sans-serif; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white">
+    <div class="max-w-md mx-auto p-6">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center">
+                <span class="text-3xl">🌿</span>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold">آتیه مهر طوس</h1>
+                <p class="text-emerald-400 text-sm">مینی اپ هوشمند</p>
+            </div>
+        </div>
+
+        <div class="bg-zinc-900 rounded-3xl p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">خوش آمدید!</h2>
+            <p class="text-zinc-400 mb-6">این مینی اپ روی بله و تلگرام کار می‌کند. داده‌ها به صورت خودکار سینک می‌شوند.</p>
+            
+            <button onclick="sendDataToBot()" 
+                    class="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors py-4 rounded-2xl font-semibold flex items-center justify-center gap-2">
+                <span>ارسال داده به ربات</span>
+            </button>
+        </div>
+
+        <div class="text-center text-xs text-zinc-500">
+            ساخته شده با ❤️ برای آتیه مهر طوس<br>
+            <span id="platform">در حال شناسایی پلتفرم...</span>
+        </div>
+    </div>
+
+    <script>
+        // Detect platform
+        function detectPlatform() {
+            const tg = window.Telegram?.WebApp;
+            const bale = window.Bale?.WebApp; // Hypothetical Bale global
+            
+            if (tg && tg.initData) {
+                document.getElementById('platform').innerHTML = 'تلگرام • ' + (tg.initDataUnsafe?.user?.first_name || 'کاربر');
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
+            } else if (bale) {
+                document.getElementById('platform').innerHTML = 'بله • کاربر بله';
+            } else {
+                document.getElementById('platform').innerHTML = 'وب عادی';
+            }
+        }
+
+        function sendDataToBot() {
+            const data = JSON.stringify({
+                action: "hello_from_miniapp",
+                timestamp: Date.now(),
+                platform: window.Telegram ? "telegram" : "bale"
+            });
+            
+            if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.sendData(data);
+                window.Telegram.WebApp.close();
+            } else {
+                alert("داده ارسال شد (شبیه‌سازی): " + data);
+            }
+        }
+
+        // Auto init
+        window.onload = detectPlatform;
+    </script>
+</body>
+</html>
