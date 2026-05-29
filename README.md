@@ -1,2 +1,66 @@
-# AtiyeMehrToos
-Dual Bale and Telegram bot with mini app support using async python-telegram-bot
+# آتیه مهر طوس — ربات دوگانه بله و تلگرام با مینی‌اپ و پل ارتباطی
+
+ربات حرفه‌ای که **همزمان و سینک** روی بله.ai و تلگرام اجرا می‌شود.
+
+## ویژگی‌های جدید (طبق درخواست شما)
+- ✅ **لینک کردن اکانت‌ها** با دستور `connect:Bale:UserID:xxxxxxxxxxxx` یا `connect:Tel:UserID:xxxxxxxxxxxx`
+- ✅ **انتقال فایل زیر ۲۰ مگابایت** بین بله و تلگرام (دانلود روی هاست → ارسال → حذف خودکار)
+- ✅ **پروفایل کاربر** کامل: تاریخ عضویت، نام کاربری، وضعیت پل، IDهای عددی
+- ✅ **ماژولار + MySQL** (آماده برای هاست cPanel)
+- ✅ پشتیبانی از مینی‌اپ (قابل گسترش برای فیش حقوقی در آینده)
+
+## استقرار روی هاست cPanel (عمومی)
+1. در cPanel → **Setup Python App** یا **Python Selector** بسازید (نسخه 3.11+)
+2. پوشه پروژه را آپلود کنید
+3. `pip install -r requirements.txt` در محیط مجازی
+4. **پوشه Downloads** را در ریشه پروژه بسازید (یا کد خودش می‌سازد)
+5. `.env` را با توکن‌ها و `DATABASE_URL=mysql+pymysql://...` پر کنید
+6. برای اجرای دائمی:
+   - از **Cron Job** استفاده کنید: `*/5 * * * * cd /path/to/project && python bot/main.py > /dev/null 2>&1 &`
+   - یا از SSH: `nohup python bot/main.py &`
+   - هشدار: هاست‌های اشتراکی ممکن است فرآیندهای طولانی را بکشند. برای پایداری بیشتر از VPS استفاده کنید.
+
+## راه‌اندازی سریع محلی
+```bash
+cp .env.example .env
+# توکن‌ها و DATABASE_URL را پر کنید
+pip install -r requirements.txt
+python bot/main.py
+```
+
+## دستورات ربات
+- `/start` — شروع + منوی مینی‌اپ
+- `/link` — دریافت کد اتصال بله ↔ تلگرام
+- `/profile` — نمایش پروفایل کامل کاربر
+- `/help` — راهنما
+
+**نحوه لینک کردن:**
+1. در تلگرام `/link` بزنید → کد `connect:Bale:...` دریافت کنید
+2. همان کد را در ربات بله paste کنید
+3. برعکس هم ممکن است
+
+**انتقال فایل:**
+فایل (سند/عکس/ویدیو) زیر ۲۰ مگ بفرستید → خودکار به اکانت دیگرتان در پلتفرم مقابل منتقل می‌شود.
+
+## دیتابیس MySQL (cPanel)
+در `.env`:
+```
+DATABASE_URL=mysql+pymysql://dbuser:dbpass@host:3306/dbname
+```
+
+## مینی‌اپ
+آدرس: https://miniapp.atiyemehrtoos.ir (قابل تغییر)
+در آینده بخش فیش حقوقی به مینی‌اپ اضافه خواهد شد.
+
+## ساختار پروژه (ماژولار)
+- `bot/main.py` — هسته ربات + هندلرها
+- `shared/database.py` — مدل‌های SQLAlchemy + MySQL
+- `miniapp/` — فرانت‌اند و بک‌اند مینی‌اپ
+- `Downloads/` — پوشه موقتی فایل‌ها (حذف خودکار)
+
+## گیت‌هاب
+https://github.com/tejaratayan-code/AtiyeMehrToos
+
+ساخته شده با مهارت **bale-telegram-bot-builder**
+
+برای آپدیت بعدی (فیش حقوقی) بگویید تا سریع اضافه کنم! 🚀
